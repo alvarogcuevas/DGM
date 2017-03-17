@@ -1,0 +1,48 @@
+---
+title: "Example based on [@mcsweeney2014stochastically]"
+author: "Alvaro Guillen-Cuevas"
+date: "February 21, 2017"
+output: pdf_document
+bibliography: mybib.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+For this exercise we will study the simulation of a process $X(t)$ as described in [@mcsweeney2014stochastically]. Such process is a jump-diffusion solving the following stochastic differential equation:
+
+$$X(t)=b(X(t))dt+\sqrt{\varepsilon}\sigma(X(t))dW(t)+\int_{\mathcal{M}}\varepsilon\gamma(X(t-),Y(t))dN_k(t)$$
+where $W(t)$ is a Brownian Motion and $N(t)$ is a marked point process with intensity measure $\Lambda(X(t))\nu(dy)$.
+
+For this example we will consider Proposition 2.1 of [@mcsweeney2014stochastically] and define $b(x)$ and $\sigma(x)$ as in Example 3.3 of the same reference, i.e.,
+
+$$b(x)=-x + (1- x)-(16/3)(1-x)x+(32/3)x^2(1-x)$$
+$$\sigma(x)=\sqrt{x + (1- x)+(16/3)(1-x)x+(32/3)x^2(1-x)}$$
+
+Further, $\Lambda(X(t))=(1/2)\tilde{\gamma}N^2x(1-x)$ for some known constants $\tilde{\gamma}$ and $N$. The jump size distribution is uniform taking values in the set $\mathcal{M}=\{-1,1\}$
+
+Using the fixed values  $N=100$, $\tilde{\gamma}=1$ and $\varepsilon=0.004$, let us analyze the behavior of said process. As in our previous work, we denot $Z(t)$ the discretization of $X(t)$. By producing the plot of a path of the process and its occupation density we can see it revolves between two states, $0.25$ and $0.75$. Further, we can see that the process is not symmetric with respect to the point $z=0.5$ because it tends to stay longer around $z=0.25$.
+
+![Sample path of $Z(s)$ up to time $s=2500$](C:/Users/User/Documents/Concordia/Research/Git/Djehiche_Giesecke/original.png)
+
+![Occupation density of $Z(s)$ up to time $s=2500$](C:/Users/User/Documents/Concordia/Research/Git/Djehiche_Giesecke/original_hist.png)
+
+We know the process is stable between the points $z=0.25$ and $z=0.75$. The way we optimize the production of the previous histogram is to force the process to change stable state more frequently. In order to do so, once it is in the neighborhood of one of those two points, we modify the drift accordingl so it jumps to the other state's neighborhood faster. We recently have explored techniques to perform this, according to the articles by [@djehiche2014min] and [@giesecke2015numerical].
+
+Without loss of generality, let the starting point be $Z(0)=0.75$ at time $s=0$. Define then the domain $\Omega_{0.75}=(0.5,1)$. Compute the optimal level $c$ to propose a change of measure affecting the drift of $Z(t)$ making it exit $\Omega_{0.75}$ faster. Then register the first time the porcess reaches the limits of $\Omega_{0.75}$, $\tau$ (say). After that, we define a new initial point, $Z(\tau)$, we modify the domain $\Omega$ accordingly and the process is repeated until a given fixed time horizon is reached, i.e., $T=2500$ for our example.
+
+If we compare te first time the process leaves $\Omega$ in the original setting we can see that there is an improvement once the change of measure is applied. Indeed, the first time the process leaves $\Omega_{0.75}$ for the original process is $\tau=52.6$, compared to the process with the change of measure, whose first exit time is $\tau=6.76$. We can verify this with the following plots.
+
+![Sample path of the first time $Z(s)$ leaves $\Omega$](C:/Users/User/Documents/Concordia/Research/Git/Djehiche_Giesecke/original_detail.png)
+
+![Sample path of the first time $Z(s)$ leaves $\Omega$ under the change of measure](C:/Users/User/Documents/Concordia/Research/Git/Djehiche_Giesecke/new_detail.png)
+
+
+After performing said procedure until the fixed time horizon $T=2500$ is reached, we can produce the following sample path and ocupation density of the process, where we verify the bistability of the process between states $z=0.25$ and $z=0.75$, spending more time in the former.
+
+![Modified sample path of $Z(s)$ up to time $s=2500$](C:/Users/User/Documents/Concordia/Research/Git/Djehiche_Giesecke/new.png)
+
+![Modified occupation density of $Z(s)$ up to time $s=2500$](C:/Users/User/Documents/Concordia/Research/Git/Djehiche_Giesecke/new_hist.png)
+
+# References
