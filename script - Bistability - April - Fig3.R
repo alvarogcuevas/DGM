@@ -5,7 +5,7 @@ library(pushoverr)
 
 source('~/Concordia/Research/Git/DGM/functions - Bistability - April.R')
 
-set.seed(5678)4
+set.seed(5678)
 
 parameters<-list(x0=0.25,low_t=0,cap_t=2500, omega_a=0.5, omega_b=1,mark_set=c(-1,1),varepsilon=0.03, N=1500, c_=0, h=0.1, new=F,stop.at.tau=F)
 
@@ -44,6 +44,8 @@ end<-proc.time()-beg
 
 p<-ggplot(sample_path,aes(x = s,y = Z))
 p+geom_line()+ ylab("Z(s)")+geom_hline(yintercept = 0.25,colour = "red")+geom_hline(yintercept = 0.75,colour = "red")
+
+write.csv(x=sample_path,file="sample_path.csv")
 
 results_matrix<-sapply(X=1:100,FUN = function(iterNumber){
   one_path<-chain(parameters=parameters,b=b,sigma_fn=sigma_fn,lambda=lambda,gamma_fn=gamma_fn, random_mark=random_mark)$Z
